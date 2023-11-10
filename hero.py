@@ -1,57 +1,86 @@
 import random
+from ability import Ability
+from armor import Armor
+from weapon import Weapon
+
 
 class Hero:
-    def __init__(self, name, starting_health=10):
+    def __init__(self, name, starting_health=100, power=50):
         self.name = name
         self.starting_health = starting_health
         self.current_health = starting_health
+        self.power = power
+        self.abilities = []
+        self.armor = []
+    
+    # My ability
+    def add_ability(self, ability):
+        self.ability = ability
+        # Appended my ability objects to my ability list.
+        self.abilities.append(ability)
+    
+    # Attack 
+    def attack(self):
+    # Calculate the total damage from all ability attacks.
+    # return: total_damage: int
+        
+        total_damage = 0
 
-        # self.name = name
-        # self.starting_health = starting_health
-        # self.current_health = starting_health
+        for ability in self.abilities:
+            # Add damage of each character to total
+            total_damage += ability.attack()
+
+        return total_damage
+    
+    # Shield
+    def add_armor(self, armor):
+        self.armor = armor
+    
+    # Defense
+    def defend(self):
+        total_block = 0
+
+        for armor in self.armor:
+            total_block += armor.block()
+        
+        return total_block
+    
+    # This allows me to store multiple weapons in my abilities list. 
+    def add_weapon(self, weapon):
+        self.abilities.append(weapon)
+        
+    
+    # def take_damage(damage):
+    
+    # def is_alive():
 
     def fight(self, opponent):
         print(f"{self.name} vs. {opponent.name} - Fight!")
 
-        round_number = 1
-        while self.current_health > 0 and opponent.current_health > 0:
-            # Continue the fight while both heroes have health remaining.
-            print(f"Round {round_number}")
-            attack = random.randint(0, 1)
-            if attack == 0:
-                opponent.current_health -= random.randint(1, 10)
+        # Calculate the toal power for both heroes.
+        total_power = self.power + opponent.power
+
+        # Calculate the chances of winning for each hero based on their power.
+        self_chance = self.power / total_power
+        opponent_chance = opponent.power / total_power
+        
+        # Continue the fight while both heros have health remaining.
+        while self.current_health > 0 and opponent.current_health > 0: 
+            winner = random.choices([self, opponent], [self_chance, opponent_chance])[0] # Randomly choose who attacks.
+            if winner == self:
+                opponent.current_health -= random.randint(1, 10) # Reduce opponents health by a random amount. 
             else:
-                self.current_health -= random.randint(1, 10)
-            round_number += 1
+                self.current_health -= random.randint(1, 10) # Reduce the hero's health by a random amount.
         # Determine the winner or declare a draw.
         if self.current_health > 0:
-            print(f"{self.name} wins! Defeated {opponent.name}")
+            print(f"{self.name} wins the battle against {opponent.name}!")
         elif opponent.current_health > 0:
-            print(f"{opponent.name} wins! Defeated {self.name}")
+            print(f"{opponent.name} wins the battle against {self.name}!")
         else:
             print("It's a draw!")
 
 if __name__ == "__main__":
-    my_hero = Hero("Spiderman", 10)
-    opponent_hero = Hero("Superman", 10)
-   
-    my_hero.fight(opponent_hero)
-
-
-    # choose random hero
-    # if random hero == this random hero
-    # print "this hero vs this hero begin fight!"
-    # call fight.random
-    # substract int between 0-1 on random hero
-    # if this.hero got 0 - 1
-    # then that hero lose
-    # print (hero who won!)
-
-    # print round 2 fight
-    # repeat loop
-
-    # if draw repeat loop
-    # else after round 2 
-    # print winner and end game
-
-    
+    hero = Hero("Thor")
+    weapon = Weapon("Hammer", 200)
+    hero.add_weapon(weapon)
+    print(f"Bash!!! Damage: {hero.attack()}")
