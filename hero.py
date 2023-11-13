@@ -12,6 +12,8 @@ class Hero:
         self.power = power
         self.abilities = []
         self.armor = []
+        self.deaths = 0
+        self.kills = 0
     
     # My ability
     def add_ability(self, ability):
@@ -54,6 +56,15 @@ class Hero:
     
     # def is_alive():
 
+    # Kill method
+    def add_kill(self, num_kills):
+        self.kills += num_kills
+
+    # Add death statistics
+    def add_death(self, num_deaths):
+        self.deaths += num_deaths
+
+
     def fight(self, opponent):
         print(f"{self.name} vs. {opponent.name} - Fight!")
 
@@ -63,6 +74,8 @@ class Hero:
         # Calculate the chances of winning for each hero based on their power.
         self_chance = self.power / total_power
         opponent_chance = opponent.power / total_power
+
+    
         
         # Continue the fight while both heros have health remaining.
         while self.current_health > 0 and opponent.current_health > 0: 
@@ -71,11 +84,20 @@ class Hero:
                 opponent.current_health -= random.randint(1, 10) # Reduce opponents health by a random amount. 
             else:
                 self.current_health -= random.randint(1, 10) # Reduce the hero's health by a random amount.
+
         # Determine the winner or declare a draw.
         if self.current_health > 0:
             print(f"{self.name} wins the battle against {opponent.name}!")
+
+            #Update statistics
+            self.add_kill(1)
+            opponent.add_death(1)
         elif opponent.current_health > 0:
             print(f"{opponent.name} wins the battle against {self.name}!")
+
+            #Update statistics
+            self.add_kill(1)
+            opponent.add_death(1)
         else:
             print("It's a draw!")
 
@@ -84,3 +106,26 @@ if __name__ == "__main__":
     weapon = Weapon("Hammer", 200)
     hero.add_weapon(weapon)
     print(f"Bash!!! Damage: {hero.attack()}")
+    hero.add_death(1)
+    print("Deaths:", hero.deaths)
+
+
+
+# ability = Ability("Great Debugging", 50)
+#     # ability2 = Ability("Fire", 200)
+#     hero1 = Hero("Spiderman", 300)
+#     # hero2 = Hero("Superman", 250)
+#     # hero1.add_ability(ability)
+#     # hero1.add_ability(ability2)
+#     armor1 = Armor("Shield", 40)
+#     armor2 = Armor("Breast Plate", 60)
+
+#     hero1.add_armor(armor1)
+#     hero1.add_armor(armor2)
+
+#     block_amount = hero1.defend()
+
+#     # print(hero1.attack())
+   
+#     # hero1.fight(hero2) # Initiate a fight between our two heros.
+
